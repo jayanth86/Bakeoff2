@@ -64,6 +64,10 @@ boolean correct_size(Target t)  {
   return abs(t.z - screenZ)<inchesToPixels(.05f);
 }
 
+boolean correct_rotation(Target t)  {
+  return calculateDifferenceBetweenAngles(t.rotation,screenRotation)<=5;
+}
+
 void draw() {
 
   background(60); //background is dark grey
@@ -98,9 +102,22 @@ void draw() {
     fill(0, 255, 0);
     noFill();
     strokeWeight(3f);
-    stroke(16);
+    stroke(0,255,0);
     rect(0, 0, t.z, t.z);
     popMatrix();
+  }  else{
+    if(!correct_rotation(t))  {
+      pushMatrix();
+      translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+      translate(screenTransX, screenTransY);
+      rotate(radians(t.rotation));
+      fill(0, 255, 0);
+      noFill();
+      strokeWeight(3f);
+      stroke(0,255,0);
+      rect(0, 0, t.z, t.z);
+      popMatrix();
+    }
   }
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
