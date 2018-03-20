@@ -68,6 +68,10 @@ boolean correct_rotation(Target t)  {
   return calculateDifferenceBetweenAngles(t.rotation,screenRotation)<=5;
 }
 
+boolean correct_translation(Target t)  {
+  return dist(t.x,t.y,screenTransX,screenTransY)<inchesToPixels(.05f); //has to be within .1";
+}
+
 void draw() {
 
   background(60); //background is dark grey
@@ -105,20 +109,35 @@ void draw() {
     stroke(0,255,0);
     rect(0, 0, t.z, t.z);
     popMatrix();
-  }  else{
-    if(!correct_rotation(t))  {
-      pushMatrix();
-      translate(width/2, height/2); //center the drawing coordinates to the center of the screen
-      translate(screenTransX, screenTransY);
-      rotate(radians(t.rotation));
-      fill(0, 255, 0);
-      noFill();
-      strokeWeight(3f);
-      stroke(0,255,0);
-      rect(0, 0, t.z, t.z);
-      popMatrix();
-    }
+  } else if (!correct_translation(t))
+     {
+       float cursorCircleSize = min(20, screenZ * .3);
+
+       pushMatrix();
+       fill(255);
+       ellipse(width/2 + screenTransX, height/2 + screenTransY, cursorCircleSize, cursorCircleSize); //draw a cirle in cursor square
+       fill(0, 255, 0);
+       ellipse(width/2 + t.x, height/2 + t.y, cursorCircleSize, cursorCircleSize); //draw a circle in target square
+       
+       //make a line between them
+       stroke(255, 255, 0);
+       line(width/2 + screenTransX, height/2 + screenTransY, width/2 + t.x, height/2 + t.y);
+
+       popMatrix();
+     } 
+  else if(!correct_rotation(t))  {
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    translate(screenTransX, screenTransY);
+    rotate(radians(t.rotation));
+    fill(0, 255, 0);
+    noFill();
+    strokeWeight(3f);
+    stroke(0,255,0);
+    rect(0, 0, t.z, t.z);
+    popMatrix();
   }
+
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
   translate(width/2, height/2); //center the drawing coordinates to the center of the screen
