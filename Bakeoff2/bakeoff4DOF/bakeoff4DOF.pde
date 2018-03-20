@@ -20,7 +20,6 @@ float screenTransX = 0;
 float screenTransY = 0;
 float screenRotation = 0;
 float screenZ = 50f;
-
 private class Target
 {
   float x = 0;
@@ -61,7 +60,9 @@ void setup() {
   Collections.shuffle(targets); // randomize the order of the button; don't change this.
 }
 
-
+boolean correct_size(Target t)  {
+  return abs(t.z - screenZ)<inchesToPixels(.05f);
+}
 
 void draw() {
 
@@ -88,7 +89,19 @@ void draw() {
   fill(255, 0, 0); //set color to semi translucent
   rect(0, 0, t.z, t.z);
   popMatrix();
-
+  
+  if(!correct_size(t))  {
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    translate(screenTransX, screenTransY);
+    rotate(radians(screenRotation));
+    fill(0, 255, 0);
+    noFill();
+    strokeWeight(3f);
+    stroke(16);
+    rect(0, 0, t.z, t.z);
+    popMatrix();
+  }
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
   translate(width/2, height/2); //center the drawing coordinates to the center of the screen
