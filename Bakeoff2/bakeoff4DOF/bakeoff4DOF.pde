@@ -20,6 +20,12 @@ float screenTransX = 0;
 float screenTransY = 0;
 float screenRotation = 0;
 float screenZ = 50f;
+
+
+//mouse info
+float prevMouseX;
+float prevMouseY;
+
 private class Target
 {
   float x = 0;
@@ -58,6 +64,9 @@ void setup() {
   }
 
   Collections.shuffle(targets); // randomize the order of the button; don't change this.
+  
+  prevMouseX = mouseX;
+  prevMouseY = mouseY;
 }
 
 boolean correct_size(Target t)  {
@@ -98,7 +107,7 @@ void draw() {
   rect(0, 0, t.z, t.z);
   popMatrix();
   if (!correct_translation(t)){
-       float cursorCircleSize = min(20, screenZ * .3);
+       float cursorCircleSize = min(20, min(screenZ, t.z) * .3);
 
        pushMatrix();
        fill(255);
@@ -202,6 +211,18 @@ void mousePressed()
     {
       startTime = millis();
       println("time started!");
+    }
+}
+
+void mouseMoved()
+{
+    float buffer = 1;
+    if (prevMouseX - mouseX < buffer)
+    {
+    }
+    else if (prevMouseX - mouseX > 0)
+    {
+      
     }
 }
 
