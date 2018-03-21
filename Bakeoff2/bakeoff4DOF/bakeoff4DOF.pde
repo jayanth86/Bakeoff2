@@ -97,20 +97,7 @@ void draw() {
   fill(255, 0, 0); //set color to semi translucent
   rect(0, 0, t.z, t.z);
   popMatrix();
-  
-  if(!correct_size(t))  {
-    pushMatrix();
-    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
-    translate(screenTransX, screenTransY);
-    rotate(radians(screenRotation));
-    fill(0, 255, 0);
-    noFill();
-    strokeWeight(3f);
-    stroke(0,255,0);
-    rect(0, 0, t.z, t.z);
-    popMatrix();
-  } else if (!correct_translation(t))
-     {
+  if (!correct_translation(t)){
        float cursorCircleSize = min(20, screenZ * .3);
 
        pushMatrix();
@@ -124,7 +111,19 @@ void draw() {
        line(width/2 + screenTransX, height/2 + screenTransY, width/2 + t.x, height/2 + t.y);
 
        popMatrix();
-     } 
+  }
+  else if(!correct_size(t))  {
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    translate(screenTransX, screenTransY);
+    rotate(radians(screenRotation));
+    fill(0, 255, 0);
+    noFill();
+    strokeWeight(3f);
+    stroke(0,255,0);   
+    rect(0, 0, t.z, t.z);
+    popMatrix();
+  }
   else if(!correct_rotation(t))  {
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
