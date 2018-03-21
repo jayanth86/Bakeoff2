@@ -49,9 +49,6 @@ void setup() {
 
   for (int i=0; i<trialCount; i++) //don't change this! 
   {
-    translateLocked = false;
-    sizeLocked = false;
-    rotationLocked = false;
     Target t = new Target();
     t.x = random(-width/2+border, width/2-border); //set a random x with some padding
     t.y = random(-height/2+border, height/2-border); //set a random y with some padding
@@ -232,6 +229,9 @@ void mouseReleased()
     
         //and move on to next trial
         trialIndex++;
+        translateLocked = false;
+        sizeLocked = false;
+        rotationLocked = false;
         
         if (trialIndex==trialCount && userDone==false)
         {
