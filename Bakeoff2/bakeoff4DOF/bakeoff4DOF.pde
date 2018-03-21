@@ -11,7 +11,9 @@ float errorPenalty = 0.5f; //for every error, add this to mean time
 int startTime = 0; // time starts when the first click is captured
 int finishTime = 0; //records the time of the final click
 boolean userDone = false;
-
+boolean translateLocked = false;
+boolean sizeLocked = false;
+boolean rotationLocked = false;
 final int screenPPI = 72; //what is the DPI of the screen you are using
 //you can test this by drawing a 72x72 pixel rectangle in code, and then confirming with a ruler it is 1x1 inch. 
 
@@ -47,6 +49,9 @@ void setup() {
 
   for (int i=0; i<trialCount; i++) //don't change this! 
   {
+    translateLocked = false;
+    sizeLocked = false;
+    rotationLocked = false;
     Target t = new Target();
     t.x = random(-width/2+border, width/2-border); //set a random x with some padding
     t.y = random(-height/2+border, height/2-border); //set a random y with some padding
@@ -176,7 +181,10 @@ void scaffoldControlLogic()
   text("+", width-inchesToPixels(.2f), height-inchesToPixels(.2f));
   if (mousePressed && dist(width, height, mouseX, mouseY)<inchesToPixels(.5f))
     screenZ+=inchesToPixels(.02f);
-
+  if(!translateLocked)  {
+    screenTransX = mouseX - width/2;
+    screenTransY = mouseY - height/2;
+  }
   //left middle, move left
   text("left", inchesToPixels(.2f), height/2);
   if (mousePressed && dist(0, height/2, mouseX, mouseY)<inchesToPixels(.5f))
@@ -209,20 +217,29 @@ void mousePressed()
 void mouseReleased()
 {
   //check to see if user clicked middle of screen within 3 inches
-  if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
-  {
-    if (userDone==false && !checkForSuccess())
-      errorCount++;
-
-    //and move on to next trial
-    trialIndex++;
+  
+      if(!translateLocked)  {
+      translateLocked = true;
+    } else if(!sizeLocked)  {
+      sizeLocked = true;
+    } else if(!rotationLocked)  {
+      rotationLocked = true;
+    }  else  {
+      if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
+      {
+        if (userDone==false && !checkForSuccess())
+          errorCount++;
     
-    if (trialIndex==trialCount && userDone==false)
-    {
-      userDone = true;
-      finishTime = millis();
+        //and move on to next trial
+        trialIndex++;
+        
+        if (trialIndex==trialCount && userDone==false)
+        {
+          userDone = true;
+          finishTime = millis();
+        }
+      }
     }
-  }
 }
 
 //probably shouldn't modify this, but email me if you want to for some good reason.
