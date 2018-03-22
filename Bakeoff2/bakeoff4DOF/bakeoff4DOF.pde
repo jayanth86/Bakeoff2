@@ -109,7 +109,7 @@ void draw() {
   rect(0, 0, t.z, t.z);
   popMatrix();
   if (!correct_translation(t)){
-       float cursorCircleSize = min(20, min(screenZ, t.z) * .3);
+       float cursorCircleSize = min(20, max(screenZ, t.z) * .3);
 
        pushMatrix();
        fill(255);
@@ -124,29 +124,51 @@ void draw() {
        popMatrix();
   }
   else if(!correct_size(t))  {
+    fill(255);
+    if (!translateLocked)
+       text("click now!", width/2, height/2);
+      
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     translate(screenTransX, screenTransY);
     rotate(radians(screenRotation));
     fill(0, 255, 0);
     noFill();
-    strokeWeight(3f);
+    
+    float weight = max(1.5, t.z * .015);
+    //print("weight: " + weight); 
+    
+    strokeWeight(weight);
     stroke(0,255,0);   
     rect(0, 0, t.z, t.z);
     popMatrix();
+    
+   //print("in size\n");
   }
   else if(!correct_rotation(t))  {
+    fill(255);
+    //print("in rot\n");
+    if (!sizeLocked)
+       text("click now!", width/2, height/2);
+       
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     translate(screenTransX, screenTransY);
     rotate(radians(t.rotation));
     fill(0, 255, 0);
     noFill();
-    strokeWeight(3f);
+    
+    float weight = max(1.5, t.z * .015);
+
+    strokeWeight(weight);
     stroke(0,255,0);
     rect(0, 0, t.z, t.z);
     popMatrix();
   }
+  
+  fill(255);
+   if (correct_rotation(t) && sizeLocked && translateLocked)
+       text("click now!", width/2, height/2);
 
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
@@ -168,7 +190,7 @@ void draw() {
 //my example design for control, which is terrible
 void scaffoldControlLogic()
 {
-  //upper left corner, rotate counterclockwise
+  /*//upper left corner, rotate counterclockwise
   text("CCW", inchesToPixels(.2f), inchesToPixels(.2f));
   if (mousePressed && dist(0, 0, mouseX, mouseY)<inchesToPixels(.5f))
     screenRotation--;
@@ -186,13 +208,13 @@ void scaffoldControlLogic()
   //lower right corner, increase Z
   text("+", width-inchesToPixels(.2f), height-inchesToPixels(.2f));
   if (mousePressed && dist(width, height, mouseX, mouseY)<inchesToPixels(.5f))
-    screenZ+=inchesToPixels(.02f);
+    screenZ+=inchesToPixels(.02f);*/
   if(!translateLocked)  {
     screenTransX = mouseX - width/2;
     screenTransY = mouseY - height/2;
   }
   //left middle, move left
-  text("left", inchesToPixels(.2f), height/2);
+  /*text("left", inchesToPixels(.2f), height/2);
   if (mousePressed && dist(0, height/2, mouseX, mouseY)<inchesToPixels(.5f))
     screenTransX-=inchesToPixels(.02f);
 
@@ -206,7 +228,7 @@ void scaffoldControlLogic()
   
   text("down", width/2, height-inchesToPixels(.2f));
   if (mousePressed && dist(width/2, height, mouseX, mouseY)<inchesToPixels(.5f))
-    screenTransY+=inchesToPixels(.02f);
+    screenTransY+=inchesToPixels(.02f);*/
 }
 
 
@@ -221,30 +243,50 @@ void mousePressed()
 
 void mouseMoved()
 {
-    float buffer = 1;
-    if (prevMouseX - mouseX < buffer)
+    /*print("r: " + rotationLocked + "\n");
+    print("s: " + sizeLocked + "\n");
+    print("t: " + translateLocked + "\n");
+    if (rotationLocked || !sizeLocked || !translateLocked)
+      return;*/
+    if (!translateLocked)
+      return;
+    float scale = 2;
+    float buffer = .15;
+    if (prevMouseX - mouseX < -buffer)
     {
+      if(!sizeLocked)
+          screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
+      else if(!rotationLocked)
+        screenRotation-= 1 * scale;
     }
-    else if (prevMouseX - mouseX > 0)
+    else if (prevMouseX - mouseX > buffer)
     {
-      
+      if(!sizeLocked)
+          screenZ+=inchesToPixels(.02f) * scale;
+      else if(!rotationLocked)
+        screenRotation+= 1 * scale;
     }
+    
+    prevMouseX = mouseX;
+    prevMouseY = mouseY;
 }
 
 
 void mouseReleased()
 {
   //check to see if user clicked middle of screen within 3 inches
-  
-      if(!translateLocked)  {
+     //print("in here");
+    if(!translateLocked)  {
       translateLocked = true;
+      //print("changed translateLocked\n");
     } else if(!sizeLocked)  {
       sizeLocked = true;
-    } else if(!rotationLocked)  {
+      //print("changed sizeLocked\n");
+    } /*else if(!rotationLocked)  {
       rotationLocked = true;
-    }  else  {
-      if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
-      {
+    }*/  else  {
+      /*if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
+      {*/
         if (userDone==false && !checkForSuccess())
           errorCount++;
     
@@ -260,7 +302,7 @@ void mouseReleased()
           finishTime = millis();
         }
       }
-    }
+    //}
 }
 
 //probably shouldn't modify this, but email me if you want to for some good reason.
