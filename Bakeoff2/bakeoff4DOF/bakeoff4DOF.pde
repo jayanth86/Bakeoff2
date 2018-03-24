@@ -252,34 +252,46 @@ void mouseMoved()
       return;
     float scale = 2;
     float buffer = .15;
+    
+    if(!sizeLocked)
+    {
+       Target t = targets.get(trialIndex); 
+      //print("target (" + t.x + ", " + t.y + ") mouseX (" + mouseX + ", " + mouseY + ")\n");
+      screenZ = max((dist(mouseX - width/2, mouseY - height/2, t.x, t.y)) * .5, 0);
+    }
+    else
+    {
+    
     if (prevMouseX - mouseX < -buffer)
     {
-      if(!sizeLocked)
+      /*if(!sizeLocked)
           screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
-      else if(!rotationLocked)
+      else*/if(!rotationLocked)
         screenRotation-= 1 * scale;
     }
     else if (prevMouseX - mouseX > buffer)
     {
-      if(!sizeLocked)
+      /*if(!sizeLocked)
           screenZ+=inchesToPixels(.02f) * scale;
-      else if(!rotationLocked)
+      else*/if(!rotationLocked)
         screenRotation+= 1 * scale;
     }
     if (prevMouseY - mouseY < -buffer)
     {
-      if(!sizeLocked)
+      /*if(!sizeLocked)
           screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
-      else if(!rotationLocked)
+      else*/if(!rotationLocked)
         screenRotation-= 1 * scale;
     }
     else if (prevMouseY - mouseY > buffer)
     {
-      if(!sizeLocked)
+      /*if(!sizeLocked)
           screenZ+=inchesToPixels(.02f) * scale;
-      else if(!rotationLocked)
+      else*/ if(!rotationLocked)
         screenRotation+= 1 * scale;
     }
+    }
+    
     
     
     prevMouseX = mouseX;
