@@ -109,7 +109,7 @@ void draw() {
   rect(0, 0, t.z, t.z);
   popMatrix();
   if (!correct_translation(t)){
-       float cursorCircleSize = min(20, max(screenZ, t.z) * .3);
+       float cursorCircleSize = (min(20, min(screenZ, t.z) * .3)) / 2;
 
        pushMatrix();
        fill(255);
@@ -119,6 +119,7 @@ void draw() {
        
        //make a line between them
        stroke(255, 255, 0);
+       strokeWeight(cursorCircleSize);
        line(width/2 + screenTransX, height/2 + screenTransY, width/2 + t.x, height/2 + t.y);
 
        popMatrix();
@@ -312,8 +313,8 @@ void mouseReleased()
     } else if(!rotationLocked)  {
       rotationLocked = true;
     }  else  {
-      if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
-      {
+      //if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
+      //{
         if (userDone==false && !checkForSuccess())
           errorCount++;
     
@@ -328,7 +329,7 @@ void mouseReleased()
           userDone = true;
           finishTime = millis();
         }
-      }
+      //}
     }
 }
 
