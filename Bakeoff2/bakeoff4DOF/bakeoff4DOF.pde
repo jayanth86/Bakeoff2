@@ -127,7 +127,10 @@ void draw() {
   else if(!correct_size(t))  {
     fill(255);
     if (!translateLocked)
+    {
+       textSize(40);
        text("click now!", width/2, height/2);
+    }
       
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
@@ -150,7 +153,10 @@ void draw() {
     fill(255);
     //print("in rot\n");
     if (!sizeLocked)
+    {
+       textSize(40);
        text("click now!", width/2, height/2);
+    }
        
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
@@ -169,7 +175,10 @@ void draw() {
   
   fill(255);
    if (correct_rotation(t) && sizeLocked && translateLocked)
+   {
+       textSize(40);
        text("Double click now!", width/2, height/2);
+   }
 
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
@@ -185,6 +194,7 @@ void draw() {
     //===========DRAW EXAMPLE CONTROLS=================
   fill(255);
   scaffoldControlLogic(); //you are going to want to replace this!
+  textSize(15);
   text("Trial " + (trialIndex+1) + " of " +trialCount, width/2, inchesToPixels(.5f));
 }
 
