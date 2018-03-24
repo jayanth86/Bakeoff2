@@ -168,29 +168,8 @@ void draw() {
   }
   
   fill(255);
-   if (!rotationLocked && correct_rotation(t) && sizeLocked && translateLocked)
-       text("click now!", width/2, height/2);
-   else if(rotationLocked && correct_rotation(t) && sizeLocked && translateLocked)  {
-     if(trialIndex != trialCount-1)  {
-       Target nextt = targets.get(trialIndex+1);
-       text("Double click here!",  nextt.x + width/2 , nextt.y + height/2);
-       float cursorCircleSize = (min(20, min(screenZ, t.z) * .3)) / 2;
-       pushMatrix();
-       fill(255);
-       ellipse(nextt.x + width/2, nextt.y + height/2, cursorCircleSize, cursorCircleSize); //draw a cirle in cursor square
-       fill(0, 255, 0);
-       ellipse(mouseX,mouseY, cursorCircleSize, cursorCircleSize); //draw a circle in target square
-       
-       //make a line between them
-       stroke(255, 255, 0);
-       strokeWeight(cursorCircleSize);
-       line(nextt.x + width/2, nextt.y + height/2, mouseX, mouseY);
-
-       popMatrix();
-     } else  {   
-       text("click here!", width/2, height/2);
-     }
-   }
+   if (correct_rotation(t) && sizeLocked && translateLocked)
+       text("Double click now!", width/2, height/2);
 
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
