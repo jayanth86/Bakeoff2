@@ -168,8 +168,16 @@ void draw() {
   }
   
   fill(255);
-   if (correct_rotation(t) && sizeLocked && translateLocked)
+   if (!rotationLocked && correct_rotation(t) && sizeLocked && translateLocked)
        text("click now!", width/2, height/2);
+   else if(rotationLocked && correct_rotation(t) && sizeLocked && translateLocked)  {
+     if(trialIndex != trialCount-1)  {
+       Target nextt = targets.get(trialIndex+1);
+       text("click here!",  nextt.x + width/2 , nextt.y + height/2);
+     } else  {   
+       text("click here!", width/2, height/2);
+     }
+   }
 
   //===========DRAW CURSOR SQUARE=================
   pushMatrix();
