@@ -266,6 +266,21 @@ void mouseMoved()
       else if(!rotationLocked)
         screenRotation+= 1 * scale;
     }
+    if (prevMouseY - mouseY < -buffer)
+    {
+      if(!sizeLocked)
+          screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
+      else if(!rotationLocked)
+        screenRotation-= 1 * scale;
+    }
+    else if (prevMouseY - mouseY > buffer)
+    {
+      if(!sizeLocked)
+          screenZ+=inchesToPixels(.02f) * scale;
+      else if(!rotationLocked)
+        screenRotation+= 1 * scale;
+    }
+    
     
     prevMouseX = mouseX;
     prevMouseY = mouseY;
