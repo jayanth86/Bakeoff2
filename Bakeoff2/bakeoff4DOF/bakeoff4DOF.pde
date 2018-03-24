@@ -257,7 +257,7 @@ void mouseMoved()
     {
        Target t = targets.get(trialIndex); 
       //print("target (" + t.x + ", " + t.y + ") mouseX (" + mouseX + ", " + mouseY + ")\n");
-      screenZ = max((dist(mouseX - width/2, mouseY - height/2, t.x, t.y)) * .5, 0);
+      screenZ = max((dist(mouseX - width/2, mouseY - height/2, t.x, t.y)) * scale, 0);
     }
     else
     {
@@ -309,11 +309,11 @@ void mouseReleased()
     } else if(!sizeLocked)  {
       sizeLocked = true;
       //print("changed sizeLocked\n");
-    } /*else if(!rotationLocked)  {
+    } else if(!rotationLocked)  {
       rotationLocked = true;
-    }*/  else  {
-      /*if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
-      {*/
+    }  else  {
+      if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
+      {
         if (userDone==false && !checkForSuccess())
           errorCount++;
     
@@ -329,7 +329,7 @@ void mouseReleased()
           finishTime = millis();
         }
       }
-    //}
+    }
 }
 
 //probably shouldn't modify this, but email me if you want to for some good reason.
