@@ -174,10 +174,23 @@ void draw() {
   }
   
   fill(255);
-   if (correct_rotation(t) && sizeLocked && translateLocked)
+   if (correct_rotation(t) && correct_size(t) && correct_size(t))
    {
        textSize(40);
        text("Double click now!", width/2, height/2);
+   }
+   
+   if (correct_translation(t) && !mousePressed)
+   {
+     translateLocked = true;
+   }
+   if (correct_size(t) && !mousePressed)
+   {
+     sizeLocked = true;
+   }
+   if (correct_rotation(t) && !mousePressed)
+   {
+     rotationLocked = true;
    }
 
   //===========DRAW CURSOR SQUARE=================
@@ -220,10 +233,10 @@ void scaffoldControlLogic()
   text("+", width-inchesToPixels(.2f), height-inchesToPixels(.2f));
   if (mousePressed && dist(width, height, mouseX, mouseY)<inchesToPixels(.5f))
     screenZ+=inchesToPixels(.02f);*/
-  if(!translateLocked)  {
+  /*if(!translateLocked)  {
     screenTransX = mouseX - width/2;
     screenTransY = mouseY - height/2;
-  }
+  }*/
   //left middle, move left
   /*text("left", inchesToPixels(.2f), height/2);
   if (mousePressed && dist(0, height/2, mouseX, mouseY)<inchesToPixels(.5f))
@@ -252,13 +265,8 @@ void mousePressed()
     }
 }
 
-void mouseMoved()
+/*void mouseMoved()
 {
-    /*print("r: " + rotationLocked + "\n");
-    print("s: " + sizeLocked + "\n");
-    print("t: " + translateLocked + "\n");
-    if (rotationLocked || !sizeLocked || !translateLocked)
-      return;*/
     if (!translateLocked)
       return;
     float scale = 2;
@@ -275,30 +283,34 @@ void mouseMoved()
     
     if (prevMouseX - mouseX < -buffer)
     {
-      /*if(!sizeLocked)
-          screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
-      else*/if(!rotationLocked)
+      //if(!sizeLocked)
+      //    screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
+      //else
+      if(!rotationLocked)
         screenRotation-= 1 * scale;
     }
     else if (prevMouseX - mouseX > buffer)
     {
-      /*if(!sizeLocked)
-          screenZ+=inchesToPixels(.02f) * scale;
-      else*/if(!rotationLocked)
+      //if(!sizeLocked)
+      //    screenZ+=inchesToPixels(.02f) * scale;
+      //else
+      if(!rotationLocked)
         screenRotation+= 1 * scale;
     }
     if (prevMouseY - mouseY < -buffer)
     {
-      /*if(!sizeLocked)
-          screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
-      else*/if(!rotationLocked)
+      //if(!sizeLocked)
+      //    screenZ=max(screenZ - inchesToPixels(.02f) * scale, 0);
+      //else*
+      if(!rotationLocked)
         screenRotation-= 1 * scale;
     }
     else if (prevMouseY - mouseY > buffer)
     {
-      /*if(!sizeLocked)
-          screenZ+=inchesToPixels(.02f) * scale;
-      else*/ if(!rotationLocked)
+      //if(!sizeLocked)
+      //    screenZ+=inchesToPixels(.02f) * scale;
+      //else 
+      if(!rotationLocked)
         screenRotation+= 1 * scale;
     }
     }
@@ -307,14 +319,51 @@ void mouseMoved()
     
     prevMouseX = mouseX;
     prevMouseY = mouseY;
-}
+}*/
 
+void mouseDragged()
+{
+  if(!translateLocked)
+  {
+    screenTransX = mouseX - width/2;
+    screenTransY = mouseY - height/2;
+    return;
+  }
+  
+  //if (!sizeLocked)
+  //{
+  //center of cursor square is screenTransX screenTransY
+  float scale = abs(dist(mouseX - width/2,mouseY - height/2,screenTransX,screenTransY));
+  screenZ=max(scale, 0);
+  //print("in drag. center: (" + screenTransX + ", " + screenTransY + ")");
+  //print(" mouse: (" + (mouseX - width/2) + ", " + (mouseY - height/2) + ")\n");
+  //return;
+  //}
+  
+  //corner 
+  float x = screenTransX - screenZ/2;
+  float y = screenTransY + screenZ/2;
+ 
+  PVector mouse = new PVector(mouseX  - width/2 - screenTransX, mouseY - height/2 - screenTransY);
+  PVector corner = new PVector(x, y);
+  PVector center = new PVector(screenTransX, screenTransY);
+
+  //print(" corner: (" + x + ", " + y + ")\n");
+  //float angle = PVector.angleBetween(mouse, corner);//angle(mouse, corner);
+  float angle = angle(center, mouse);
+  print("center: (" + center.x + ", " + center.y + ")\n");
+  print("mouse: (" + mouse.x + ", " + mouse.y + ")\n");
+  print(" angle: " + degrees(angle) + "\n");
+  screenRotation = degrees(angle);
+}
 
 void mouseReleased()
 {
+  if (!(rotationLocked && translateLocked && sizeLocked))
+    return;
   //check to see if user clicked middle of screen within 3 inches
      //print("in here");
-    if(!translateLocked)  {
+    /*if(!translateLocked)  {
       translateLocked = true;
       //print("changed translateLocked\n");
     } else if(!sizeLocked)  {
@@ -322,7 +371,7 @@ void mouseReleased()
       //print("changed sizeLocked\n");
     } else if(!rotationLocked)  {
       rotationLocked = true;
-    }  else  {
+    }  else  {*/
       //if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
       //{
         if (userDone==false && !checkForSuccess())
@@ -340,7 +389,7 @@ void mouseReleased()
           finishTime = millis();
         }
       //}
-    }
+    //}
 }
 
 //probably shouldn't modify this, but email me if you want to for some good reason.
@@ -368,3 +417,9 @@ double calculateDifferenceBetweenAngles(float a1, float a2)
       else
         return diff;
  }
+ 
+float angle(PVector v1, PVector v2) {
+  float a = atan2(v2.y, v2.x) - atan2(v1.y, v1.x);
+  //if (a < 0) a += TWO_PI;
+  return a;
+}
