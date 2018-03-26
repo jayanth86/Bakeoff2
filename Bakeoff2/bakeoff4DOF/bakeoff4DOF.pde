@@ -98,17 +98,17 @@ void draw() {
     text("User took " + ((finishTime-startTime)/1000f/trialCount+(errorCount*errorPenalty)) + " sec per target inc. penalty", width/2, inchesToPixels(.2f)*4);
     return;
   }
-  /*
+  
   //===========DRAW TARGET SQUARE=================
   pushMatrix();
   translate(width/2, height/2); //center the drawing coordinates to the center of the screen
-  Target t = targets.get(trialIndex);
-  translate(t.x, t.y); //center the drawing coordinates to the center of the screen
-  rotate(radians(t.rotation));
+  Target t1 = targets.get(trialIndex);
+  translate(t1.x, t1.y); //center the drawing coordinates to the center of the screen
+  rotate(radians(t1.rotation));
   fill(255, 0, 0); //set color to semi translucent
-  rect(0, 0, t.z, t.z);
+  rect(0, 0, t1.z, t1.z);
   popMatrix();
-  if (!correct_translation(t)){
+  /*if (!correct_translation(t)){
        float cursorCircleSize = (min(20, min(screenZ, t.z) * .3)) / 2;
 
        pushMatrix();
@@ -205,18 +205,19 @@ void draw() {
   popMatrix();
   */
   if(!translateLocked)  {
+    float circleSize = 20;
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     Target t = targets.get(trialIndex);
     translate(t.x, t.y); //center the drawing coordinates to the center of the screen
     fill(0, 255, 0); //set color to semi translucent
-    ellipse(0,0,10,10);
+    ellipse(0,0,circleSize,circleSize);
     popMatrix();
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     translate(screenTransX, screenTransY); //center the drawing coordinates to the center of the screen
     fill(0, 255, 0); //set color to semi translucent
-    ellipse(0,0,10,10);
+    ellipse(0,0,circleSize,circleSize);
     stroke(255, 255, 0);
     strokeWeight(5);
     popMatrix();
@@ -353,9 +354,7 @@ void mouseMoved()
 }
 
 void mouseDragged()
-{
-  
-  
+{  
   //if (!sizeLocked)
   //{
   //center of cursor square is screenTransX screenTransY
@@ -385,19 +384,19 @@ void mouseDragged()
 
 void mouseReleased()
 {
-  if (!(rotationLocked && translateLocked && sizeLocked))
-    return;
+  //if (!(rotationLocked && translateLocked && sizeLocked))
+    //return;
   //check to see if user clicked middle of screen within 3 inches
      //print("in here");
-    /*if(!translateLocked)  {
+    if(!translateLocked)  {
       translateLocked = true;
       //print("changed translateLocked\n");
     } else if(!sizeLocked)  {
       sizeLocked = true;
       //print("changed sizeLocked\n");
-    } else if(!rotationLocked)  {
-      rotationLocked = true;
-    }  else  {*/
+    //} else if(!rotationLocked)  {
+      //rotationLocked = true;
+    //}  else  {
       //if (dist(width/2, height/2, mouseX, mouseY)<inchesToPixels(3f))
       //{
         if (userDone==false && !checkForSuccess())
@@ -414,6 +413,7 @@ void mouseReleased()
           userDone = true;
           finishTime = millis();
         }
+      }
       //}
     //}
 }
