@@ -98,7 +98,7 @@ void draw() {
     text("User took " + ((finishTime-startTime)/1000f/trialCount+(errorCount*errorPenalty)) + " sec per target inc. penalty", width/2, inchesToPixels(.2f)*4);
     return;
   }
-
+  /*
   //===========DRAW TARGET SQUARE=================
   pushMatrix();
   translate(width/2, height/2); //center the drawing coordinates to the center of the screen
@@ -203,7 +203,32 @@ void draw() {
   stroke(160);
   rect(0,0, screenZ, screenZ);
   popMatrix();
-  
+  */
+  if(!translateLocked)  {
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    Target t = targets.get(trialIndex);
+    translate(t.x, t.y); //center the drawing coordinates to the center of the screen
+    fill(0, 255, 0); //set color to semi translucent
+    ellipse(0,0,10,10);
+    popMatrix();
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    translate(screenTransX, screenTransY); //center the drawing coordinates to the center of the screen
+    fill(0, 255, 0); //set color to semi translucent
+    ellipse(0,0,10,10);
+    stroke(255, 255, 0);
+    strokeWeight(5);
+    popMatrix();
+    line(width/2 + screenTransX, height/2 + screenTransY, width/2 + t.x, height/2 + t.y);
+    if(correct_translation(t))  {
+      textSize(40);
+      text("click now!", width/2, height/2);
+    }  else  {
+      //background(60);
+    }
+    
+  }
     //===========DRAW EXAMPLE CONTROLS=================
   fill(255);
   scaffoldControlLogic(); //you are going to want to replace this!
@@ -265,8 +290,9 @@ void mousePressed()
     }
 }
 
-/*void mouseMoved()
+void mouseMoved()
 {
+    /*
     if (!translateLocked)
       return;
     float scale = 2;
@@ -315,20 +341,20 @@ void mousePressed()
     }
     }
     
-    
-    
-    prevMouseX = mouseX;
-    prevMouseY = mouseY;
-}*/
-
-void mouseDragged()
-{
+    */
   if(!translateLocked)
   {
     screenTransX = mouseX - width/2;
     screenTransY = mouseY - height/2;
     return;
   }
+  prevMouseX = mouseX;
+  prevMouseY = mouseY;
+}
+
+void mouseDragged()
+{
+  
   
   //if (!sizeLocked)
   //{
