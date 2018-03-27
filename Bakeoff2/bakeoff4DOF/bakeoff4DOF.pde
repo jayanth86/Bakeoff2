@@ -100,14 +100,14 @@ void draw() {
   }
   
   //===========DRAW TARGET SQUARE=================
-  pushMatrix();
+  /*pushMatrix();
   translate(width/2, height/2); //center the drawing coordinates to the center of the screen
   Target t1 = targets.get(trialIndex);
   translate(t1.x, t1.y); //center the drawing coordinates to the center of the screen
   rotate(radians(t1.rotation));
   fill(255, 0, 0); //set color to semi translucent
   rect(0, 0, t1.z, t1.z);
-  popMatrix();
+  popMatrix();*/
   /*if (!correct_translation(t)){
        float cursorCircleSize = (min(20, min(screenZ, t.z) * .3)) / 2;
 
@@ -231,7 +231,6 @@ void draw() {
     
   } else if (!sizeLocked)
   {
-    float pointSize = 5;
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     translate(screenTransX, screenTransY);
@@ -250,31 +249,32 @@ void draw() {
     float scale = abs(dist(t.x + t.z/2,t.y + t.z/2,t.x - t.z/2,t.y - t.z/2));
     translate(screenTransX, screenTransY); //center the drawing coordinates to the center of the screen
     //fill(0, 255, 0); //set color to semi translucent
-    rotate(radians(t1.rotation));
-    
+    rotate(radians(t.rotation));
+    float pointSize = min(20, t.z * .5);
+
     translate(t.z/2, t.z/2);
     fill(0,255,0);
-    stroke(0);
+    stroke(0, 255, 0);
     ellipse(0,0,pointSize,pointSize);
     translate(-t.z/2, -t.z/2);
 
     
     translate(-t.z/2, t.z/2);
     fill(0,255,0);
-    stroke(0);
+    stroke(0, 255, 0);
     ellipse(0,0,pointSize,pointSize);
     translate(t.z/2, -t.z/2);
 
     
     translate(t.z/2, -t.z/2);
     fill(0,255,0);
-    stroke(0);
+    stroke(0, 255, 0);
     ellipse(0,0,pointSize,pointSize);
     translate(-t.z/2, t.z/2);
 
     translate(-t.z/2, -t.z/2);
     fill(0,255,0);
-    stroke(0);
+    stroke(0, 255, 0);
     ellipse(0,0,pointSize,pointSize);
     translate(t.z/2, t.z/2);
 
