@@ -204,8 +204,8 @@ void draw() {
   rect(0,0, screenZ, screenZ);
   popMatrix();
   */
+  float circleSize = 20;
   if(!translateLocked)  {
-    float circleSize = 20;
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     Target t = targets.get(trialIndex);
@@ -228,6 +228,36 @@ void draw() {
     }  else  {
       //background(60);
     }
+    
+  } else if (!sizeLocked)
+  {
+    float pointSize = 10;
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    translate(screenTransX, screenTransY);
+    rotate(radians(screenRotation));
+    noFill();
+    strokeWeight(3f);
+    stroke(160);
+    rect(0,0, screenZ, screenZ);
+    popMatrix();
+    
+    
+    //draw the goal circles
+    pushMatrix();
+    translate(width/2, height/2); //center the drawing coordinates to the center of the screen
+    Target t = targets.get(trialIndex);
+    float scale = abs(dist(t.x + t.z/2,t.y + t.z/2,t.x - t.z/2,t.y - t.z/2));
+    translate(screenTransX, screenTransY); //center the drawing coordinates to the center of the screen
+    //fill(0, 255, 0); //set color to semi translucent
+    
+    /*translate(t.z/2, t.z/2);
+    fill(0);
+    ellipse(0,0,pointSize,pointSize);*/
+    ellipse(0,0,scale,scale);
+    //ellipse(0,0,t.z,t.z);
+    popMatrix();    
+    
     
   }
     //===========DRAW EXAMPLE CONTROLS=================
@@ -348,6 +378,10 @@ void mouseMoved()
     screenTransX = mouseX - width/2;
     screenTransY = mouseY - height/2;
     return;
+  } else if (!sizeLocked)
+  {
+    float scale = abs(dist(mouseX - width/2,mouseY - height/2,screenTransX,screenTransY));
+    screenZ=max(scale, 0);
   }
   prevMouseX = mouseX;
   prevMouseY = mouseY;
