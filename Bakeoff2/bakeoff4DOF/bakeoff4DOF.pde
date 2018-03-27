@@ -363,7 +363,22 @@ void mouseMoved()
   } else if (!sizeLocked)
   {
     float scale = abs(dist(mouseX - width/2,mouseY - height/2,screenTransX,screenTransY));
-    screenZ=max(scale, 0);
+    screenZ=scale;
+    
+    float x = screenTransX - screenZ/2;
+    float y = screenTransY + screenZ/2;
+ 
+    PVector mouse = new PVector(mouseX  - width/2 - screenTransX, mouseY - height/2 - screenTransY);
+    PVector corner = new PVector(x, y);
+    PVector center = new PVector(screenTransX, screenTransY);
+
+    //print(" corner: (" + x + ", " + y + ")\n");
+    //float angle = PVector.angleBetween(mouse, corner);//angle(mouse, corner);
+    float angle = angle(center, mouse);
+    //print("center: (" + center.x + ", " + center.y + ")\n");
+    //print("mouse: (" + mouse.x + ", " + mouse.y + ")\n");
+    //print(" angle: " + degrees(angle) + "\n");
+    screenRotation = degrees(angle);
   }
   prevMouseX = mouseX;
   prevMouseY = mouseY;
