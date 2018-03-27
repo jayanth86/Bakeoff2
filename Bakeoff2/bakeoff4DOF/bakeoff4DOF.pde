@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.lang.Math;
 //these are variables you should probably leave alone
 int index = 0;
 int trialCount = 8; //this will be set higher for the bakeoff
@@ -253,27 +253,27 @@ void draw() {
     rotate(radians(t1.rotation));
     
     translate(t.z/2, t.z/2);
-    fill(0);
+    fill(0,255,0);
     stroke(0);
     ellipse(0,0,pointSize,pointSize);
     translate(-t.z/2, -t.z/2);
 
     
     translate(-t.z/2, t.z/2);
-    fill(0);
+    fill(0,255,0);
     stroke(0);
     ellipse(0,0,pointSize,pointSize);
     translate(t.z/2, -t.z/2);
 
     
     translate(t.z/2, -t.z/2);
-    fill(0);
+    fill(0,255,0);
     stroke(0);
     ellipse(0,0,pointSize,pointSize);
     translate(-t.z/2, t.z/2);
 
     translate(-t.z/2, -t.z/2);
-    fill(0);
+    fill(0,255,0);
     stroke(0);
     ellipse(0,0,pointSize,pointSize);
     translate(t.z/2, t.z/2);
@@ -282,7 +282,12 @@ void draw() {
     //ellipse(0,0,scale,scale);
     //ellipse(0,0,t.z,t.z);
     popMatrix();    
-    
+    if(correct_size(t) && correct_rotation(t))  {
+      textSize(40);
+      text("click now!", width/2, height/2);
+    }  else  {
+      //background(60);
+    }
     
   }
     //===========DRAW EXAMPLE CONTROLS=================
@@ -362,15 +367,15 @@ void mouseMoved()
     return;
   } else if (!sizeLocked)
   {
-    float scale = abs(dist(mouseX - width/2,mouseY - height/2,screenTransX,screenTransY));
-    screenZ=scale;
-    
-    float x = screenTransX - screenZ/2;
+
+    float scale = dist(mouseX - width/2,mouseY - height/2,screenTransX,screenTransY);
+    screenZ= scale*2/sqrt(2);
+     float x = screenTransX - screenZ/2;
     float y = screenTransY + screenZ/2;
  
     PVector mouse = new PVector(mouseX  - width/2 - screenTransX, mouseY - height/2 - screenTransY);
     PVector corner = new PVector(x, y);
-    PVector center = new PVector(screenTransX, screenTransY);
+    PVector center = new PVector(0, 1);
 
     //print(" corner: (" + x + ", " + y + ")\n");
     //float angle = PVector.angleBetween(mouse, corner);//angle(mouse, corner);
@@ -378,7 +383,8 @@ void mouseMoved()
     //print("center: (" + center.x + ", " + center.y + ")\n");
     //print("mouse: (" + mouse.x + ", " + mouse.y + ")\n");
     //print(" angle: " + degrees(angle) + "\n");
-    screenRotation = degrees(angle);
+    screenRotation = degrees(angle) + 45;   
+    
   }
   prevMouseX = mouseX;
   prevMouseY = mouseY;
