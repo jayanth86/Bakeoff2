@@ -231,7 +231,7 @@ void draw() {
     
   } else if (!sizeLocked)
   {
-    float pointSize = 10;
+    float pointSize = 5;
     pushMatrix();
     translate(width/2, height/2); //center the drawing coordinates to the center of the screen
     translate(screenTransX, screenTransY);
@@ -250,11 +250,36 @@ void draw() {
     float scale = abs(dist(t.x + t.z/2,t.y + t.z/2,t.x - t.z/2,t.y - t.z/2));
     translate(screenTransX, screenTransY); //center the drawing coordinates to the center of the screen
     //fill(0, 255, 0); //set color to semi translucent
+    rotate(radians(t1.rotation));
     
-    /*translate(t.z/2, t.z/2);
+    translate(t.z/2, t.z/2);
     fill(0);
-    ellipse(0,0,pointSize,pointSize);*/
-    ellipse(0,0,scale,scale);
+    stroke(0);
+    ellipse(0,0,pointSize,pointSize);
+    translate(-t.z/2, -t.z/2);
+
+    
+    translate(-t.z/2, t.z/2);
+    fill(0);
+    stroke(0);
+    ellipse(0,0,pointSize,pointSize);
+    translate(t.z/2, -t.z/2);
+
+    
+    translate(t.z/2, -t.z/2);
+    fill(0);
+    stroke(0);
+    ellipse(0,0,pointSize,pointSize);
+    translate(-t.z/2, t.z/2);
+
+    translate(-t.z/2, -t.z/2);
+    fill(0);
+    stroke(0);
+    ellipse(0,0,pointSize,pointSize);
+    translate(t.z/2, t.z/2);
+
+    
+    //ellipse(0,0,scale,scale);
     //ellipse(0,0,t.z,t.z);
     popMatrix();    
     
